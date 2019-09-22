@@ -1,6 +1,7 @@
 <template>
-  <div class="colorRed">
-    <div class="box"></div>
+  <div>
+    <!-- 组件占位符 -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -12,10 +13,27 @@ export default {
 };
 </script>
 
+
 <style>
-.box {
-  width: 10vw;
-  height: 10vw;
-  background: gray;
+@import url("http://at.alicdn.com/t/font_1426139_h6vn3jbl5q.css");
+/* 公共样式 */
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: inherit;
+}
+a:hover {
+  text-decoration: none;
+}
+ul,
+li,
+ol {
+  list-style: none;
+}
+i,
+em {
+  font-style: normal;
 }
 </style>
