@@ -30,7 +30,7 @@ export default {
       const { value } = event.target;
       /* 触发父组件的input事件，返回输入框的值 */
       this.$emit("input", value);
-      /* 如果符合正则就位success，反之是error */
+      /* 如果符合正则就位为success，反之是error */
       if (this.rule) {
         if (this.rule.test(value)) {
           this.status = "success";
@@ -57,13 +57,14 @@ export default {
   box-sizing: border-box;
   background: #fff;
   border: none;
-  border: 2px #666 solid;
+  border-bottom: 2px #666 solid;
   outline: none;
+  font-size: 18px;
 }
 .success {
-  border-color: blue;
+  border-bottom-color: blue;
 }
 .error {
-  border-color: red;
+  border-bottom-color: red;
 }
 </style>
