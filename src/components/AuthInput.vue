@@ -53,7 +53,7 @@ export default {
 .input {
   width: 100%;
   height: 38/360 * 100vw;
-  padding: 20px;
+  padding: 20px 0;
   box-sizing: border-box;
   background: #fff;
   border: none;
