@@ -35,7 +35,7 @@
 
 <script>
 /* 导入请求库 */
-import axios from "axios";
+//import axios from "axios";
 /* 导入组件 */
 import AuthInput from "@/components/AuthInput";
 import AuthButton from "@/components/AuthButton";
@@ -64,7 +64,7 @@ export default {
     },
     /* 表单提交 */
     handleSubmit() {
-      axios({
+      this.$axios({
         url: "http://localhost:3000/login",
         method: "POST", // method相当于type
         data: this.form
