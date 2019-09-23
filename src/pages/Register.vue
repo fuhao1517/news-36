@@ -22,6 +22,13 @@
       ></AuthInput>
 
       <AuthInput
+        placeholder="昵称"
+        v-model="form.nickname"
+        :rule="/^[0-9a-zA-Z\u4e00-\u9fa5]{2,6}$/"
+        err_message="昵称格式不正确"
+      ></AuthInput>
+
+      <AuthInput
         placeholder="密码"
         type="password"
         v-model="form.password"
@@ -30,11 +37,11 @@
       ></AuthInput>
     </div>
     <p class="tips">
-      没有账号？
-      <router-link to="/register">去注册</router-link>
+      有账号？
+      <router-link to="/login">去登录</router-link>
     </p>
     <!-- <button @click="handleSubmit">登录按钮</button> -->
-    <AuthButton text="登录" @click="handleSubmit" />
+    <AuthButton text="注册" @click="handleSubmit" />
   </div>
 </template>
 
@@ -51,7 +58,8 @@ export default {
       /* 发送给后台的数据 */
       form: {
         username: "",
-        password: ""
+        password: "",
+        nickname: ""
       }
     };
   },
@@ -70,15 +78,15 @@ export default {
     /* 表单提交 */
     handleSubmit() {
       this.$axios({
-        url: "/login",
+        url: "/register",
         method: "POST", // method相当于type
         data: this.form
         /*  method相当于type */
       }).then(res => {
         const { message } = res.data;
-        if (message === "登录成功") {
-          //跳转到首页
-          this.$router.push("/");
+        if (message === "注册成功") {
+          //跳转到登录页
+          this.$router.push("/login");
         }
       });
     }
@@ -113,11 +121,12 @@ export default {
     margin-bottom: 20px;
   }
 }
-.tips{
-  text-align:right;
+
+.tips {
+  text-align: right;
   margin-bottom: 20px;
-  a{
-    color:#3385ff
+  a {
+    color: #3385ff;
   }
 }
 </style>
