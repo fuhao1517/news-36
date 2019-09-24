@@ -15,7 +15,7 @@
     <CellBar label="我的关注" text="关注的用户" />
     <CellBar label="我的跟帖" text="跟帖/回复" />
     <CellBar label="我的收藏" text="文章/视频" />
-    <CellBar label="设置" />
+    <CellBar label="退出" @click="handleLogout" />
   </div>
 </template>
 
@@ -31,6 +31,17 @@ export default {
   },
   components: {
     CellBar
+  },
+
+  methods: {
+      /* 退出登录 */
+      handleLogout(){
+          /* 清除本地的token和id */
+          localStorage.removeItem("token");
+          localStorage.removeItem("user_id");
+          /* replace替换上一个页面 */
+          this.$router.replace("/login");
+      }
   },
   mounted() {
     /* 请求个人资料接口 */
