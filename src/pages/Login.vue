@@ -75,10 +75,13 @@ export default {
         data: this.form
         /*  method相当于type */
       }).then(res => {
-        const { message } = res.data;
+        const { message, data } = res.data;
         if (message === "登录成功") {
+          /* 把token和id保存到本地 */
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user_id", data.user.id);
           //跳转到首页
-          this.$router.push("/");
+          this.$router.push("/personal");
         }
       });
     }
@@ -113,11 +116,11 @@ export default {
     margin-bottom: 20px;
   }
 }
-.tips{
-  text-align:right;
+.tips {
+  text-align: right;
   margin-bottom: 20px;
-  a{
-    color:#3385ff
+  a {
+    color: #3385ff;
   }
 }
 </style>
