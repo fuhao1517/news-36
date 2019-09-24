@@ -13,6 +13,7 @@ import axios from "axios"
 import App from "@/App";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import Personal from "@/pages/Personal";
 
 
 
@@ -32,7 +33,11 @@ const routes = [{
     {
         path: "/register",
         component: Register
-    }
+    },
+    {
+        path: "/personal",
+        component: Personal
+    },
 ]
 
 // 路由：3.创建对象
