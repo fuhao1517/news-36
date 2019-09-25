@@ -59,7 +59,7 @@ export default {
       show2: false,
       /* 性别弹窗 */
       show3: false,
-      genderCache: `1`,
+      genderCache: `0`
     };
   },
   components: {
@@ -137,7 +137,13 @@ export default {
     },
     /* 编辑性别 */
     handlGender() {
-      console.log()
+      /* 把性别转换成数字 */
+      const gender = +this.genderCache;
+      /* 编辑性别 */
+      this.editProfile({ gender }, () => {
+        /* 修改成功之后替换页面显示的性别 */
+        this.profile.gender = gender;
+      });
     }
   },
   mounted() {
