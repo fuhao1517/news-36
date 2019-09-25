@@ -9,7 +9,13 @@
       <van-uploader :after-read="afterRead" class="uploader" />
     </div>
     <!-- 调用条形组件 -->
-    <CellBar label="昵称" :text="profile.nickname" />
+    <CellBar label="昵称" :text="profile.nickname" @click="show1=!show1" />
+    <!-- 昵称编辑输入框 -->
+    <!-- 鼠标放到属性上就可以查看 -->
+    <van-dialog v-model="show1" title="编辑昵称" show-cancel-button>
+      <!--value读取昵称  -->
+      <van-field :value="profile.nickname" placeholder="请输入用户名" />
+    </van-dialog>
     <CellBar label="密码" :text="profile.password" type="password" />
     <CellBar label="性别" :text="profile.gender===1?'男':'女'" />
   </div>
@@ -24,7 +30,9 @@ export default {
   data() {
     return {
       /* 用户详情 */
-      profile: {}
+      profile: {},
+      /* 昵称弹窗 */
+      show1: false
     };
   },
   components: {
