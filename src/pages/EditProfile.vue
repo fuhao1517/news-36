@@ -25,7 +25,21 @@
       <!--value读取密码 -->
       <van-field :value="profile.password" placeholder="请输入密码" ref="password" />
     </van-dialog>
-    <CellBar label="性别" :text="profile.gender===1?'男':'女'" />
+    <CellBar label="性别" :text="profile.gender===1?'男':'女'" @click="show3=!show3" />
+    <!-- 性别编辑输入框 -->
+    <van-dialog v-model="show3" title="编辑性别" show-cancel-button @confirm="handlGender">
+      <van-radio-group v-model="genderCache">
+        <van-cell-group>
+          <van-cell title="男" clickable @click="genderCache=`1`">
+            <van-radio slot="right-icon" name="1" />
+          </van-cell>
+
+          <van-cell title="女" clickable @click="genderCache=`0`">
+            <van-radio slot="right-icon" name="0" />
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+    </van-dialog>
   </div>
 </template>
 
@@ -43,6 +57,9 @@ export default {
       show1: false,
       /* 密码弹窗 */
       show2: false,
+      /* 性别弹窗 */
+      show3: false,
+      genderCache: `1`,
     };
   },
   components: {
@@ -117,6 +134,10 @@ export default {
       this.editProfile({ password: value }, () => {
         this.profile.password = value;
       });
+    },
+    /* 编辑性别 */
+    handlGender() {
+      console.log()
     }
   },
   mounted() {
@@ -132,6 +153,8 @@ export default {
       if (data) {
         /* 保存data */
         this.profile = data;
+        /* 把后台返回的性别复制genderCache,性别需要转换成字符串 */
+        this.genderCache = String(data.gender);
         /* 如果用户有头像 */
         if (data.head_img) {
           this.profile.head_img = this.$axios.defaults.baseURL + data.head_img;
