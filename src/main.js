@@ -15,6 +15,7 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Personal from "@/pages/Personal";
 import EditProfile from "@/pages/EditProfile";
+import UserFollow from "@/pages/UserFollow";
 
 
 
@@ -39,12 +40,17 @@ const routes = [{
     {
         path: "/personal",
         component: Personal
-    }, {
+    },
+    {
         path: "/edit_profile",
         component: EditProfile
     },
+    {
+        path: "/user_follow",
+        component: UserFollow
+    },
 
-    
+
 ]
 
 // 路由：3.创建对象
@@ -60,7 +66,7 @@ router.beforeEach((to, from, next) => {
     /* 是否有token */
     const hasToken = localStorage.getItem("token");
     /* 判断是否是需要登录权限的页面 */
-    if (to.path === "/personal" || to.pach==='/edit_profile') {
+    if (to.path === "/personal" || to.pach === '/edit_profile') {
         /* 判断本地是否有token */
         if (hasToken) {
             /* 正常跳转 */
@@ -88,7 +94,7 @@ axios.interceptors.response.use(res => {
         Toast.fail(message);
     }
     /* token过期了，或者token无效，一般引起的原因可能token被清空，密码修改了 */
-    if(message==="用户信息验证失败"){
+    if (message === "用户信息验证失败") {
         /* 跳转到登录 */
         router.push("/login")
     }
