@@ -14,6 +14,8 @@ import App from "@/App";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Personal from "@/pages/Personal";
+import EditProfile from "@/pages/EditProfile";
+
 
 
 
@@ -37,7 +39,12 @@ const routes = [{
     {
         path: "/personal",
         component: Personal
+    }, {
+        path: "/edit_profile",
+        component: EditProfile
     },
+
+    
 ]
 
 // 路由：3.创建对象
@@ -53,7 +60,7 @@ router.beforeEach((to, from, next) => {
     /* 是否有token */
     const hasToken = localStorage.getItem("token");
     /* 判断是否是需要登录权限的页面 */
-    if (to.path === "/personal") {
+    if (to.path === "/personal" || to.pach==='/edit_profile') {
         /* 判断本地是否有token */
         if (hasToken) {
             /* 正常跳转 */
