@@ -5,6 +5,8 @@
     <!-- 头像 -->
     <div class="head">
       <img :src="profile.head_img" alt />
+      <!-- vant上传组件 -->
+      <van-uploader :after-read="afterRead" class="uploader" />
     </div>
     <!-- 调用条形组件 -->
     <CellBar label="昵称" :text="profile.nickname" />
@@ -28,6 +30,9 @@ export default {
   components: {
     HeaderNormal,
     CellBar
+  },
+  methods: {
+    afterRead() {}
   },
   mounted() {
     /* 请求个人资料接口 */
@@ -60,11 +65,21 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  position: relative;
+  .uploader {
+    position: absolute;
+    opacity: 0.8;
+  }
   img {
     display: block;
     width: 100/360 * 100vw;
     width: 100/360 * 100vw;
     border-radius: 50%;
   }
+}
+// 如果要修改第三方组件库的样式时候，需要在前面加上/deep/， 因为组件库的样式不受scoped的影响
+/deep/.van-uploader__upload {
+  width: 100/360 * 100vw;
+  height: 100/360 * 100vw;
 }
 </style>
