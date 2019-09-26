@@ -79,19 +79,24 @@ export default {
     onLoad() {
       setTimeout(() => {
         console.log("已经滚动到底部");
+
         /* 请求文章列表 */
         this.$axios({
           url: `/post?category=${this.cid}&pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
         }).then(res => {
           const { data } = res.data;
+
           /* 没有更多的数据了 */
           if (data.length < this.pageSize) {
             this.finished = true;
           }
+
           /* 默认赋值给头条的列表 */
           this.posts = [...this.posts, ...data];
+
           /* 页数加一 */
           this.pageIndex++;
+
           /* 告诉onload事件这次的数据加载已经完毕，下次可以继续的出发onload */
           this.loading = false;
         });
@@ -102,28 +107,50 @@ export default {
     const config = {
       url: "/category"
     };
+
     /* 是否存在token，如果有就给头部加上token验证 */
     if (localStorage.getItem("token")) {
       config.headers = {
         Authorization: localStorage.getItem("token")
       };
     }
+
     /* 请求栏目的数据 */
     this.$axios(config).then(res => {
       const { data } = res.data;
+      const newData = [];
+
+      /* 循环给栏目中每一项都添加四个独立的属性 */
+      data.forEach(v => {
+        /*  默认的头条文章列表*/
+        v.posts = [];
+        /* 是否在加载;加载完毕后需要手动变为false */
+        v.loading = false;
+        /* 是否有更多数据，如果加载完所有的数据，改为true */
+        v.finished = false;
+        /* 分页的变量 */
+        v.pageIndex = 1;
+        newData.push(v);
+      });
+
       /* 保存了栏目列表 */
-      this.categories = data;
+      this.categories = newData;
+      console.log(this.categories);
     });
+
     /* 请求文章列表 */
     this.$axios({
-      url: `/post?category=${this.cid}`
+      url: `/post?category=${this.cid}&pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
     }).then(res => {
       const { data } = res.data;
+
       /*  默认赋值给头条的列表 */
       this.posts = data;
-    });
+      /* 页面加一 */
+      this.pageIndex++;
+    })
   }
-};
+}
 </script>
 
 <style scoped lang="less">
