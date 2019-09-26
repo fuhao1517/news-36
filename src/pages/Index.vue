@@ -13,6 +13,8 @@
         <span class="iconfont iconwode personal"></span>
       </router-link>
     </div>
+
+
     <!-- 栏目列表 -->
     <!-- v-model: 默认选中的标签栏 -->
     <!-- sticky: 配置粘性布局 -->
@@ -20,21 +22,21 @@
     <van-tabs v-model="active" sticky swipeable>
       <!-- title: 要显示的内容 -->
       <van-tab v-for="(item,index) in categories" :key="index" :title="item.name">
-        <!-- 文章模块组件，post是单篇文章详情  -->
-        <PostCard v-for="(item,index) in posts" :key="index" :post="item" />
+        <!-- 文章模块组件，post是单篇文章详情 
+        <PostCard v-for="(item,index) in posts" :key="index" :post="item" /> -->
         <!-- v-model: 列表是否在加载 -->
         <!-- finished: 是否加载完毕 -->
         <!-- load: 到底部触发的事件 -->
         <!-- immediate-check 禁止list立即出发onload -->
         <van-list
-          v-model="loading"
-          :finished="finished"
+          v-model="item.loading"
+          :finished="item.finished"
           finished-text="没有更多了"
           @load="onLoad"
           :immediate-check="false"
         >
           <!-- 文章模块组件，post是单篇文章详情 -->
-          <PostCard v-for="(item,index) in posts" :key="index" :post="item" />
+          <PostCard v-for="(item,index) in item.posts" :key="index" :post="item" />
         </van-list>
       </van-tab>
     </van-tabs>
@@ -55,12 +57,12 @@ export default {
       /* 栏目id */
       cid: 999,
       /*  默认的头条文章列表*/
-      posts: [],
-      /* 是否在加载,加载完毕后需要手动变为false */
-      loading: false,
-      /* 是否有更多数据，如果加载完所有的数据，改为true */
-      finished: false,
-      /* 分页的变量 */
+        // posts: [],
+        // /* 是否在加载,加载完毕后需要手动变为false */
+        // loading: false,
+        // /* 是否有更多数据，如果加载完所有的数据，改为true */
+        // finished: false,
+        // /* 分页的变量只用第一次加载 */
       pageIndex: 1,
       /* 每页加载条数这个值不用去修改 */
       pageSize: 5
@@ -69,6 +71,7 @@ export default {
   watch: {
     active() {
       this.cid = this.categories[this.active].id;
+       console.log(this.cid)
     }
   },
   components: {
@@ -77,35 +80,35 @@ export default {
   methods: {
     /* 加载下一页的数据 */
     onLoad() {
-      setTimeout(() => {
-        console.log("已经滚动到底部");
+    //   setTimeout(() => {
+    //     console.log("已经滚动到底部");
+    //     /* 请求文章列表 */
+    //     this.$axios({
+    //       url: `/post?category=${this.cid}&pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
+    //     }).then(res => {
+    //       const { data } = res.data;
 
-        /* 请求文章列表 */
-        this.$axios({
-          url: `/post?category=${this.cid}&pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
-        }).then(res => {
-          const { data } = res.data;
+    //       /* 没有更多的数据了 */
+    //       if (data.length < this.pageSize) {
+    //         this.finished = true;
+    //       }
 
-          /* 没有更多的数据了 */
-          if (data.length < this.pageSize) {
-            this.finished = true;
-          }
+    //       /* 默认赋值给头条的列表 */
+    //       this.posts = [...this.posts, ...data];
 
-          /* 默认赋值给头条的列表 */
-          this.posts = [...this.posts, ...data];
+    //       /* 页数加一 */
+    //       this.pageIndex++;
 
-          /* 页数加一 */
-          this.pageIndex++;
+    //       /* 告诉onload事件这次的数据加载已经完毕，下次可以继续的出发onload */
+    //       this.loading = false;
 
-          /* 告诉onload事件这次的数据加载已经完毕，下次可以继续的出发onload */
-          this.loading = false;
-        });
-      }, 5000);
+    //     });
+    //   }, 4000);
     }
   },
   mounted() {
     const config = {
-      url: "/category"
+      url: "/category",
     };
 
     /* 是否存在token，如果有就给头部加上token验证 */
@@ -135,22 +138,20 @@ export default {
 
       /* 保存了栏目列表 */
       this.categories = newData;
-      console.log(this.categories);
+
+      /* 必须要先等待栏目请求完毕，再请求文章列表 */
+      this.$axios({
+        url: `/post?category=${this.cid}&pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
+      }).then(res => {
+        const { data } = res.data;
+        /*  默认赋值给头条的列表 */
+        this.categories[this.active].posts = data;
+        /* 页面加一 */
+        this.categories[this.active].pageIndex++;
+      });
     });
-
-    /* 请求文章列表 */
-    this.$axios({
-      url: `/post?category=${this.cid}&pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
-    }).then(res => {
-      const { data } = res.data;
-
-      /*  默认赋值给头条的列表 */
-      this.posts = data;
-      /* 页面加一 */
-      this.pageIndex++;
-    })
   }
-}
+};
 </script>
 
 <style scoped lang="less">
