@@ -35,34 +35,39 @@ export default {
   data() {
     return {
       /* 当前默认的栏目, 没有登录应该0，有登录等于1, 最终的效果为了默认显示头条 */
+      /* 随着栏目的切换会变化 */
       active: localStorage.getItem("token") ? 1 : 0,
       /* 栏目列表 */
-      categories: []
-    };
+      categories: [],
+      /* 栏目id */
+      cid: 999
+    }
+  },
+  watch: {
+    active() {
+      this.cid = this.categories[this.active].id;
+      console.log(this.cid);
+    }
   },
   components: {
     PostCard
   },
-  mounted () {
-     const config={
-         url:"/category",
-     }
-     /* 是否存在token，如果有就给头部加上token验证 */
-     if(localStorage.getItem("token")){
-         config.headers={
-             Authorization: localStorage.getItem("token")
-         }
-     }
-     /* 请求栏目的数据 */
-     this.$axios(config)
-     .then(res=>{
-         const{data}=res.data;
-         /* 保存了栏目列表 */
-        //  console.log(this.categories);
-         
-         this.categories=data;
-
-     })
+  mounted() {
+    const config = {
+      url: "/category"
+    };
+    /* 是否存在token，如果有就给头部加上token验证 */
+    if (localStorage.getItem("token")) {
+      config.headers = {
+        Authorization: localStorage.getItem("token")
+      };
+    }
+    /* 请求栏目的数据 */
+    this.$axios(config).then(res => {
+      const { data } = res.data;
+      /* 保存了栏目列表 */
+      this.categories = data;
+    });
   }
 };
 </script>
