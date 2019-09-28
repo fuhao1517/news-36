@@ -6,7 +6,7 @@
 
       <div class="right">
         <span class="comment">
-          <i>1020</i>
+          <i>{{post.comment_length}}</i>
           <em class="iconfont iconpinglun-"></em>
         </span>
         <span class="iconfont iconshoucang"></span>
@@ -30,12 +30,14 @@ export default {
       isFocus: false
     };
   },
+  props:["post"],
   methods: {
     /* 获得焦点时触发 */
     handleFocule() {
       this.isFocus = true;
     }
-  }
+  },
+ 
 };
 </script>
 
@@ -99,6 +101,7 @@ export default {
           border-radius: 50px;
           color: #fff;
           font-size: 12px;
+          padding: 0 10px;
         }
       }
       .iconshoucang {
