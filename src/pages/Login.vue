@@ -24,7 +24,8 @@
       <AuthInput
         placeholder="密码"
         type="password"
-        v-model="form.password"
+        :value="form.password"
+        @input="handlePassword"
         :rule="/^[0-9a-zA-Z]{3,12}$/"
         err_message="密码格式不正确"
       ></AuthInput>
@@ -67,8 +68,16 @@ export default {
     handleUsername(value) {
       this.form.username = value;
     },
+    handlePassword(value) {
+      this.form.password = value;
+    },
     /* 表单提交 */
     handleSubmit() {
+      if(this.form.username===""||this.form.password===""){
+        this.$toast.fail("用户名或密码不能为空")
+        return
+      }
+      
       this.$axios({
         url: "/login",
         method: "POST", // method相当于type

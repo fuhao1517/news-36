@@ -5,7 +5,10 @@
         <img :src="profile.head_img" alt />
         <div class="profile-center">
           <div class="name">
-            <span class="iconfont iconxingbienan"></span>
+            <span
+              class="iconfont"
+              :class="profile.gender===1?'iconxingbienan blue': 'iconxingbienv red'"
+            ></span>
             {{profile.nickname}}
           </div>
           <div class="time">2019-9-24</div>
@@ -93,8 +96,11 @@ export default {
     padding: 0 10px;
   }
   .name {
-    span {
+    .blue {
       color: #75b9eb;
+    }
+    .red {
+      color: pink;
     }
   }
   .time {
