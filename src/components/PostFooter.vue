@@ -52,9 +52,9 @@ export default {
   left: 0;
   width: 100%;
   border-top: 1px #eee solid;
-  padding: 0 10px;
-  margin-top: 100px;
+  padding: 20px 5px 7px 10px;
   box-sizing: border-box;
+  background: #fff;
   .footer-comment {
     width: 100%;
     display: flex;
