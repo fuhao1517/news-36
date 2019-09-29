@@ -34,7 +34,7 @@
       </div>
 
       <!-- 页脚组件 -->
-      <PostFooter :post="detail" @handleStar="handleStar"/>
+      <PostFooter :post="detail" @handleStar="handleStar" />
     </div>
   </div>
 </template>
@@ -106,16 +106,19 @@ export default {
         if (message === "点赞成功") {
           /* 修改点赞的按钮的状态 */
           this.detail.has_like = true;
+          this.detail.like_length++;
         }
         if (message === "取消成功") {
           /* 修改点赞的按钮的状态 */
           this.detail.has_like = false;
+          this.detail.like_length--;
+
         }
-         this.$toast.success(message);
+        this.$toast.success(message);
       });
     },
-    
-     /* 收藏 */
+
+    /* 收藏 */
     handleStar() {
       this.$axios({
         url: "/post_star/" + this.detail.id,
@@ -128,17 +131,14 @@ export default {
         if (message === "收藏成功") {
           /* 修改收藏的按钮的状态 */
           this.detail.has_star = true;
-        
         }
         if (message === "取消成功") {
           /* 修改收藏的按钮的状态 */
           this.detail.has_star = false;
-        
         }
-          this.$toast.success(message);
+        this.$toast.success(message);
       });
     }
-
   },
   mounted() {
     /* 请求文章的详情 */
