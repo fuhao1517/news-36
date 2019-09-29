@@ -53,7 +53,7 @@
 
       <span class="right">
         <i class="iconfont iconweixin"></i>
-        <em>微信</em>
+        <a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#1">微信</a>
       </span>
     </div>
 
