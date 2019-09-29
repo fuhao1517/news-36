@@ -1,15 +1,19 @@
 <template>
   <div class="footer-wrap">
     <div class="footer" v-show="!isFocus">
-    <!-- 普通页脚 -->
-    <input type="text" placeholder="写跟帖" @focus="handleFocule" />
+      <!-- 普通页脚 -->
+      <input type="text" placeholder="写跟帖" @focus="handleFocule" />
 
       <div class="right">
         <span class="comment">
           <i>{{post.comment_length}}</i>
           <em class="iconfont iconpinglun-"></em>
         </span>
-        <span class="iconfont iconshoucang"></span>
+        <span
+          class="iconfont iconshoucang"
+          :class="{star_active:post.has_star}"
+          @click="$emit('handleStar')"
+        ></span>
         <span class="iconfont iconfenxiang"></span>
       </div>
     </div>
@@ -30,14 +34,14 @@ export default {
       isFocus: false
     };
   },
-  props:["post"],
+  /* 接受文章的详情 */
+  props: ["post"],
   methods: {
     /* 获得焦点时触发 */
     handleFocule() {
       this.isFocus = true;
     }
-  },
- 
+  }
 };
 </script>
 
@@ -110,6 +114,9 @@ export default {
       .iconfont {
         font-size: 20px;
       }
+    }
+    .star_active {
+      color: red;
     }
   }
 }

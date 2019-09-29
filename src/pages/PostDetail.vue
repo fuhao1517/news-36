@@ -22,7 +22,7 @@
       <p class="text" v-html="detail.content"></p>
 
       <div class="like">
-        <span class="left">
+        <span class="left" @click="handleLike" :class="{like_active:detail.has_like}">
           <i class="iconfont icondianzan"></i>
           <em>{{detail.like_length}}</em>
         </span>
@@ -34,7 +34,7 @@
       </div>
 
       <!-- 页脚组件 -->
-      <PostFooter :post="detail" />
+      <PostFooter :post="detail" @handleStar="handleStar"/>
     </div>
   </div>
 </template>
@@ -75,6 +75,7 @@ export default {
         }
       });
     },
+    /* 取消关注当前作者 */
     handleUnFollow() {
       /* 通过作者id关注作者 */
       this.$axios({
@@ -91,7 +92,53 @@ export default {
           this.$toast.success(message);
         }
       });
+    },
+    /* 点赞 */
+    handleLike() {
+      this.$axios({
+        url: "/post_like/" + this.detail.id,
+        /* 添加头信息 */
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        const { message } = res.data;
+        if (message === "点赞成功") {
+          /* 修改点赞的按钮的状态 */
+          this.detail.has_like = true;
+        }
+        if (message === "取消成功") {
+          /* 修改点赞的按钮的状态 */
+          this.detail.has_like = false;
+        }
+         this.$toast.success(message);
+      });
+    },
+    
+     /* 收藏 */
+    handleStar() {
+      this.$axios({
+        url: "/post_star/" + this.detail.id,
+        /* 添加头信息 */
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        const { message } = res.data;
+        if (message === "收藏成功") {
+          /* 修改收藏的按钮的状态 */
+          this.detail.has_star = true;
+        
+        }
+        if (message === "取消成功") {
+          /* 修改收藏的按钮的状态 */
+          this.detail.has_star = false;
+        
+        }
+          this.$toast.success(message);
+      });
     }
+
   },
   mounted() {
     /* 请求文章的详情 */
@@ -192,16 +239,23 @@ export default {
     span {
       width: 75/360 * 100vw;
       height: 30/360 * 100vw;
-      text-align:center;
+      text-align: center;
       border: 1px solid #7a7a7a;
       border-radius: 50px;
       padding: 0 15px;
       height: 30/360 * 100vw;
       line-height: 30/360 * 100vw;
     }
+
     .right {
       i {
         color: #00c800;
+      }
+    }
+    .like_active {
+      border: 1px red solid;
+      i {
+        color: red;
       }
     }
   }
