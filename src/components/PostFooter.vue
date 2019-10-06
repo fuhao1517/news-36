@@ -45,7 +45,7 @@ export default {
       /* 评论的内容 */
       value: "",
       /* 输入框的提示文字 */
-      placeholder: "写跟帖",
+      placeholder: "写跟帖"
     };
   },
   /* 接受文章的详情 */
@@ -55,8 +55,11 @@ export default {
 
   watch: {
     replyComment() {
-      this.isFocus = true;
-      this.placeholder = "@" + this.replyComment.user.nickname;
+      /* 评论回复有值得时候才显示@的用户名 */
+      if (this.replyComment) {
+        this.isFocus = true;
+        this.placeholder = "@" + this.replyComment.user.nickname;
+      }
     }
   },
   methods: {
@@ -68,6 +71,12 @@ export default {
     handleBlur() {
       if (!this.value) {
         this.isFocus = false;
+
+        /* 如果有回复的评论，清空回复的评论 */
+        if (this.replyComment) {
+          this.$emit("handleReply", null);
+          this.placeholder = "写跟帖";
+        }
       }
     },
     /* 发布评论 */

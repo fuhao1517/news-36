@@ -29,7 +29,7 @@
     <!-- post文章的详情
     replyComment：要回复的评论
     getComments：发布评论成功后重新请求评论的列表-->
-    <PostFooter :post="detail" :replyComment="replyComment" @getComments="getComments" />
+    <PostFooter :post="detail" :replyComment="replyComment" @handleReply="handleReply" @getComments="getComments" />
   </div>
 </template>
 
