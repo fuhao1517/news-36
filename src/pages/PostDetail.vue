@@ -292,7 +292,7 @@ export default {
       font-size: 14px;
       line-height: 1.5;
       margin-bottom: 35px;
-      /deep/ img {
+      img {
         max-width: 100%;
       }
     }

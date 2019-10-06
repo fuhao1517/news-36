@@ -5,10 +5,13 @@
       <input type="text" placeholder="写跟帖" @focus="handleFocule" />
 
       <div class="right">
-        <span class="comment">
-          <i>{{post.comment_length}}</i>
-          <em class="iconfont iconpinglun-"></em>
-        </span>
+        <router-link :to="`/post_comment/${post.id}`">
+          <span class="comment">
+            <i>{{post.comment_length}}</i>
+            <em class="iconfont iconpinglun-"></em>
+          </span>
+        </router-link>
+        <!-- 收藏 -->
         <span
           class="iconfont iconshoucang"
           :class="{star_active:post.has_star}"

@@ -22,6 +22,7 @@ import UserComment from "@/pages/UserComment";
 /* 前台页面 */
 import Index from "@/pages/Index";
 import PostDetail from "@/pages/PostDetail";
+import Comment from "@/pages/Comment";
 
 
 
@@ -66,6 +67,10 @@ const routes = [{
     {
         path: "/post_detail/:id",
         component: PostDetail
+    },
+    {
+        path: "/post_comment/:id",
+        component: Comment
     },
 
 ]
