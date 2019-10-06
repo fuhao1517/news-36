@@ -1,5 +1,7 @@
 <template>
   <div>
+    <!-- 自己再次在这个位置调用自己 -->
+    <comment v-if="data.parent" :data="data.parent"></comment>
     <!-- 评论楼层 -->
     <div class="comment-floor">
       <div class="floor-header">
@@ -10,9 +12,6 @@
 
       <div class="comment-content">{{data.content}}</div>
     </div>
-
-    <!-- 自己再次在这个位置调用自己 -->
-    <comment v-if="data.parent" :data="data.parent"></comment>
   </div>
 </template>
 

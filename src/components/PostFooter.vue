@@ -23,7 +23,7 @@
 
     <!-- 输入评论页脚, 这里显示隐藏必须要用v-show，原因是为了获得textare的dom元素 -->
     <div class="footer-comment" v-show="isFocus">
-      <textarea rows="3" ref="textarea" v-model="value" @blur="isFocus=false" :autofocus="isFocus"></textarea>
+      <textarea rows="3" ref="textarea" v-model="value" @blur="handleBlur" :autofocus="isFocus"></textarea>
       <span @click="handleSubmit">发送</span>
     </div>
   </div>
@@ -45,6 +45,12 @@ export default {
     /* 获得焦点时触发 */
     handleFocule() {
       this.isFocus = true;
+    },
+    /* 失去焦点时触发 */
+    handleBlur() {
+      if (!this.value) {
+        this.isFocus = false;
+      }
     },
     /* 发布评论 */
     handleSubmit() {
@@ -68,6 +74,10 @@ export default {
           this.$emit("getComments", this.post.id);
           /* 隐藏输入框 */
           this.isFocus = false;
+          /* 清空输入框的值 */
+          this.value = "";
+          /* 滚动到顶部 */
+          window.scrollTo(0, 0);
         }
       });
     }
