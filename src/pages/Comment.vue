@@ -3,15 +3,16 @@
     <!-- 头部组件 -->
     <HeaderNormal title="精彩跟帖" />
     <!-- 评论模块 -->
-    <div class="comment">
+    <div class="comment" v-for="(item,index) in comments" :key="index">
       <div class="comment-info">
         <!-- 左侧的用户信息 -->
         <div class="comment-user">
           <!-- 头像 -->
-          <img src="../../static/default_green.jpg" alt />
+          <img :src="$axios.defaults.baseURL+item.user.head_img" v-if="item.user.head_img" alt />
+          <img src="../../static/default_green.jpg" v-else />
           <!-- 用户名字 -->
           <div class="user-info">
-            <p>火星网友</p>
+            <p>{{item.user.nickname}}</p>
             <span>2小时前</span>
           </div>
         </div>
@@ -19,27 +20,65 @@
         <span class="reply">回复</span>
       </div>
 
-      <!-- 评论楼层 -->
-      <div class="comment-floor">
-        <div class="floor-header">
-          <span>1 火星网友</span>
-          <i>2 小时前</i>
-          <em>回复</em>
-        </div>
+      <!-- 渲染评论楼层的组件 -->
+      <CommentFloor v-if="item.parent" :data="item.parent" />
 
-        <div class="comment-content">文章说的很有道理！</div>
-      </div>
-
-      <div class="comment-content">文章说的很有道理！</div>
+      <div class="comment-content">{{item.content}}</div>
     </div>
+    <!-- 页脚组件 -->
+    <PostFooter :post="detail" />
   </div>
 </template>
 
 <script>
+/* 引入公共头部 */
 import HeaderNormal from "@/components/HeaderNormal";
+/* 评论楼层组件 */
+import CommentFloor from "@/components/CommentFloor";
+/* 页面发布评论的底部 */
+import PostFooter from "@/components/PostFooter";
+
 export default {
+  data() {
+    return {
+      /* 评论的列表 */
+      comments: [],
+      /* 文章的详情 */
+      detail: {}
+    };
+  },
+  /* 注册组件 */
   components: {
-    HeaderNormal
+    HeaderNormal,
+    CommentFloor,
+    PostFooter
+  },
+
+  mounted() {
+    /* 文章的id */
+    const { id } = this.$route.params;
+    /* 请求文章评论 */
+    this.$axios({
+      url: "/post_comment/" + id
+    }).then(res => {
+      const { data } = res.data;
+      this.comments = data;
+    });
+    /* 文章的详情 */
+    const config = {
+      url: "/post/" + id
+    };
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers = {
+        Authorization: token
+      };
+    }
+    this.$axios(config).then(res => {
+      const { data } = res.data;
+      /* 保存到详情 */
+      this.detail = data;
+    });
   }
 };
 </script>
@@ -78,23 +117,6 @@ export default {
   }
   .comment-content {
     padding: 15px 0 0;
-  }
-}
-
-.comment-floor {
-  border: 1px #ccc solid;
-  padding: 10px;
-  background: #f6f6f6;
-  .floor-header {
-    font-size: 13px;
-    color: #666;
-    i {
-      font-size: 12px;
-      color: #999;
-    }
-    em{
-      float: right;
-    }
   }
 }
 </style>
