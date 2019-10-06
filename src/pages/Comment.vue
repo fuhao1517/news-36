@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <!-- 头部组件 -->
     <HeaderNormal title="精彩跟帖" />
     <!-- 评论模块 -->
@@ -26,7 +26,7 @@
       <div class="comment-content">{{item.content}}</div>
     </div>
     <!-- 页脚组件 -->
-    <PostFooter :post="detail" />
+    <PostFooter :post="detail" @getComments="getComments" />
   </div>
 </template>
 
@@ -53,17 +53,24 @@ export default {
     CommentFloor,
     PostFooter
   },
+  methods: {
+    /* 请求评论的列表 */
+    getComments(id) {
+      /* 请求文章评论 */
+      this.$axios({
+        url: "/post_comment/" + id
+      }).then(res => {
+        const { data } = res.data;
+        this.comments = data;
+      });
+    }
+  },
 
   mounted() {
     /* 文章的id */
     const { id } = this.$route.params;
-    /* 请求文章评论 */
-    this.$axios({
-      url: "/post_comment/" + id
-    }).then(res => {
-      const { data } = res.data;
-      this.comments = data;
-    });
+    /* 请求评论的列表 */
+    this.getComments(id);
     /* 文章的详情 */
     const config = {
       url: "/post/" + id
@@ -84,6 +91,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.container {
+  padding-bottom: 100/360 * 100vw;
+}
 .comment {
   padding: 15px 10px;
   border-bottom: 1px #eee solid;
