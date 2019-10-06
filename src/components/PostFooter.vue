@@ -84,6 +84,15 @@ export default {
       if (!this.value) {
         return;
       }
+      /* 评论的参数 */
+      const data = {
+        content: this.value
+      };
+      /* 如果有回复的评论，加上parent_id */
+      if (this.replyComment) {
+        data.parent_id = this.replyComment.id;
+      }
+
       this.$axios({
         url: "/post_comment/" + this.post.id,
         method: "POST",
@@ -91,14 +100,12 @@ export default {
         headers: {
           Authorization: localStorage.getItem("token")
         },
-        data: {
-          content: this.value
-        }
+        data
       }).then(res => {
         const { message } = res.data;
         if (message === "评论发布成功") {
           /* 触发父组件方法更新评论的列表 */
-          this.$emit("getComments", this.post.id);
+          this.$emit("getComments", this.post.id,"isReply");
           /* 隐藏输入框 */
           this.isFocus = false;
           /* 清空输入框的值 */

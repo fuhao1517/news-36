@@ -3,33 +3,49 @@
     <!-- 头部组件 -->
     <HeaderNormal title="精彩跟帖" />
     <!-- 评论模块 -->
-    <div class="comment" v-for="(item,index) in comments" :key="index">
-      <div class="comment-info">
-        <!-- 左侧的用户信息 -->
-        <div class="comment-user">
-          <!-- 头像 -->
-          <img :src="$axios.defaults.baseURL+item.user.head_img" v-if="item.user.head_img" alt />
-          <img src="../../static/default_green.jpg" v-else />
-          <!-- 用户名字 -->
-          <div class="user-info">
-            <p>{{item.user.nickname}}</p>
-            <span>2小时前</span>
+    <!-- v-model：是否在加载
+    finished：是否加载完毕
+    load：到底部触发加载-->
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="我可是有底线的"
+      :immediate-check="false"
+      @load="onLoad"
+    >
+      <div class="comment" v-for="(item,index) in comments" :key="index">
+        <div class="comment-info">
+          <!-- 左侧的用户信息 -->
+          <div class="comment-user">
+            <!-- 头像 -->
+            <img :src="$axios.defaults.baseURL+item.user.head_img" v-if="item.user.head_img" alt />
+            <img src="../../static/default_green.jpg" v-else />
+            <!-- 用户名字 -->
+            <div class="user-info">
+              <p>{{item.user.nickname}}</p>
+              <span>2小时前</span>
+            </div>
           </div>
+
+          <span class="reply" @click="handleReply(item)">回复</span>
         </div>
 
-        <span class="reply" @click="handleReply(item)">回复</span>
+        <!-- 渲染评论楼层的组件 -->
+        <CommentFloor v-if="item.parent" :data="item.parent" @handleReply="handleReply" />
+
+        <div class="comment-content">{{item.content}}</div>
       </div>
-
-      <!-- 渲染评论楼层的组件 -->
-      <CommentFloor v-if="item.parent" :data="item.parent" />
-
-      <div class="comment-content">{{item.content}}</div>
-    </div>
+    </van-list>
     <!-- 页脚组件 -->
     <!-- post文章的详情
     replyComment：要回复的评论
     getComments：发布评论成功后重新请求评论的列表-->
-    <PostFooter :post="detail" :replyComment="replyComment" @handleReply="handleReply" @getComments="getComments" />
+    <PostFooter
+      :post="detail"
+      :replyComment="replyComment"
+      @handleReply="handleReply"
+      @getComments="getComments"
+    />
   </div>
 </template>
 
@@ -49,7 +65,12 @@ export default {
       /* 文章的详情 */
       detail: {},
       /* 保存点击回复的评论 */
-      replyComment: null
+      replyComment: null,
+      /* 分页的参数 */
+      loading: false,
+      finished: false,
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   /* 注册组件 */
@@ -60,19 +81,43 @@ export default {
   },
   methods: {
     /* 请求评论的列表 */
-    getComments(id) {
+    getComments(id, isReply) {
+      /* 如果评论发布成功，初始化分页的数据和列表数据 */
+      if (isReply === "isReply") {
+        this.pageIndex = 1;
+        this.comments = [];
+      }
       /* 请求文章评论 */
       this.$axios({
-        url: "/post_comment/" + id
+        /* 条数默认是10 */
+        url: `/post_comment/${id}?pageIndex=${this.pageIndex}`
       }).then(res => {
         const { data } = res.data;
-        this.comments = data;
+        /* 覆盖评论的列表 */
+        this.comments = [...this.comments, ...data];
+        /* 请求完毕需要手动变为false */
+        this.loading = false;
+        if (data.length < this.pageSize) {
+          this.finished = true;
+          return;
+        }
+        /* 页数加1 */
+        this.pageIndex++;
       });
     },
     /* 点击回复按钮时触发的方法 */
     handleReply(item) {
       //获取到当前要回复的id
       this.replyComment = item;
+    },
+    /* 评论加载更多 */
+    onLoad(){
+      setTimeout(()=>{
+        /* 文章的id */
+        const{id}=this.$route.params;
+        /* 请求下一页的数据 */
+        this.getComments(id);
+      },2000)
     }
   },
 
