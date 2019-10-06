@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <span class="reply">回复</span>
+        <span class="reply" @click="handleReply(item)">回复</span>
       </div>
 
       <!-- 渲染评论楼层的组件 -->
@@ -26,7 +26,10 @@
       <div class="comment-content">{{item.content}}</div>
     </div>
     <!-- 页脚组件 -->
-    <PostFooter :post="detail" @getComments="getComments" />
+    <!-- post文章的详情
+    replyComment：要回复的评论
+    getComments：发布评论成功后重新请求评论的列表-->
+    <PostFooter :post="detail" :replyComment="replyComment" @getComments="getComments" />
   </div>
 </template>
 
@@ -44,7 +47,9 @@ export default {
       /* 评论的列表 */
       comments: [],
       /* 文章的详情 */
-      detail: {}
+      detail: {},
+      /* 保存点击回复的评论 */
+      replyComment: null
     };
   },
   /* 注册组件 */
@@ -63,6 +68,11 @@ export default {
         const { data } = res.data;
         this.comments = data;
       });
+    },
+    /* 点击回复按钮时触发的方法 */
+    handleReply(item) {
+      //获取到当前要回复的id
+      this.replyComment = item;
     }
   },
 

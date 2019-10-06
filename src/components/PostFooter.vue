@@ -23,7 +23,14 @@
 
     <!-- 输入评论页脚, 这里显示隐藏必须要用v-show，原因是为了获得textare的dom元素 -->
     <div class="footer-comment" v-show="isFocus">
-      <textarea rows="3" ref="textarea" v-model="value" @blur="handleBlur" :autofocus="isFocus"></textarea>
+      <textarea
+        rows="3"
+        ref="textarea"
+        v-model="value"
+        :placeholder="placeholder"
+        @blur="handleBlur"
+        :autofocus="isFocus"
+      ></textarea>
       <span @click="handleSubmit">发送</span>
     </div>
   </div>
@@ -36,11 +43,22 @@ export default {
       /* 输入框是否获得焦点 */
       isFocus: false,
       /* 评论的内容 */
-      value: ""
+      value: "",
+      /* 输入框的提示文字 */
+      placeholder: "写跟帖",
     };
   },
   /* 接受文章的详情 */
-  props: ["post"],
+  // props: ["post"],
+  /* replyComment 要回复的评论 */
+  props: ["post", "replyComment"],
+
+  watch: {
+    replyComment() {
+      this.isFocus = true;
+      this.placeholder = "@" + this.replyComment.user.nickname;
+    }
+  },
   methods: {
     /* 获得焦点时触发 */
     handleFocule() {
