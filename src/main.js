@@ -23,6 +23,7 @@ import UserComment from "@/pages/UserComment";
 import Index from "@/pages/Index";
 import PostDetail from "@/pages/PostDetail";
 import Comment from "@/pages/Comment";
+import Search from "@/pages/Search";
 
 
 
@@ -71,6 +72,10 @@ const routes = [{
     {
         path: "/post_comment/:id",
         component: Comment
+    },
+    {
+        path: "/Search",
+        component: Search
     },
 
 ]

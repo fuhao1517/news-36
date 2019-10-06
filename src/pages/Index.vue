@@ -4,10 +4,12 @@
     <div class="header">
       <span class="iconfont iconnew logo"></span>
 
-      <div class="header-search">
-        <span class="iconfont iconsearch"></span>
-        <i>搜索新闻</i>
-      </div>
+      <router-link to="/search" class="link-search">
+        <div class="header-search">
+          <span class="iconfont iconsearch"></span>
+          <i>搜索新闻</i>
+        </div>
+      </router-link>
 
       <router-link to="/personal">
         <span class="iconfont iconwode personal"></span>
@@ -174,12 +176,17 @@ export default {
     font-size: 22/360 * 100vw;
     color: #fff;
   }
+  .link-search {
+    display: block;
+    flex: 1;
+    margin: 0 30px;
+  }
   .header-search {
     height: 34/360 * 100vw;
     background: rgba(255, 255, 255, 0.5);
     flex: 1;
-    margin: 0 30px;
-    display: flex;
+    // margin: 0 30px;
+    // display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
