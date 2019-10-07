@@ -21,7 +21,7 @@
 /* 文章列表模块的组件 */
 import PostCard from "@/components/PostCard";
 export default {
-  name:"search",
+  name: "search",
   data() {
     return {
       /* 搜索的关键字 */
@@ -44,6 +44,25 @@ export default {
         /* 赋值给list */
         this.list = data;
       });
+    }
+  },
+  /* 组件内的路由守卫，判断如果是首页进入到搜索页的，清空页面的缓存数据 */
+  // https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E7%BB%84%E4%BB%B6%E5%86%85%E7%9A%84%E5%AE%88%E5%8D%AB
+  // to: 去哪里
+  // from: 从哪里来
+  // next: 函数，必须要调用，可以接受url的路径、函数，不传参数。
+  beforeRouteEnter(to, from, next) {
+    /* 如果from.path之等于斜杆 */
+    if (from.path === "\/") {
+      // 在渲染该组件的对应路由被 confirm 前调用
+      // 不！能！获取组件实例 `this`,需要在next的回调函数中获取
+      next(vm => {
+        // vm就是组件的实例，也就是this
+        vm.keyword = "";
+        vm.list = [];
+      });
+    } else {
+      next();
     }
   }
 };
