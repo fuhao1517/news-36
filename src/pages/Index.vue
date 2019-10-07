@@ -39,6 +39,15 @@
           <!-- 文章模块组件，post是单篇文章详情 -->
           <PostCard v-for="(item,index) in item.posts" :key="index" :post="item" />
         </van-list>
+        <!-- 加载中的图标 -->
+        <van-loading
+          v-if="item.posts.length===0&&!item.finished"
+          size="24px"
+          style="margin-top:20px;"
+          vertical
+          type="spinner"
+          color="#1989fa"
+        >加载中...</van-loading>
       </van-tab>
     </van-tabs>
   </div>
@@ -48,7 +57,7 @@
 /* 文章列表模块 */
 import PostCard from "@/components/PostCard";
 export default {
-  name:"index",//可以命名为任意字符串
+  name: "index", //可以命名为任意字符串
   data() {
     return {
       /* 当前默认的栏目, 没有登录应该0，有登录等于1, 最终的效果为了默认显示头条 */
