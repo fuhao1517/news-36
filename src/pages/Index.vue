@@ -37,7 +37,7 @@
           :immediate-check="false"
         >
           <!-- 文章模块组件，post是单篇文章详情 -->
-          <PostCard v-for="(item,index) in item.posts" :key="index" :post="item" />
+          <PostCard v-for="(item,index) in item.posts" v-if="item.open===1" :key="index" :post="item"/>
         </van-list>
         <!-- 加载中的图标 -->
         <van-loading
